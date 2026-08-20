@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Askar Mektep - Eğlenerek Öğren!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cat1:#8E1B1B; --cat2:#B22222;
+    --navy:#0D1B4C; --navy2:#1B2A5E;
+    --gold:#D4AF37; --gold-lt:#F0DA9A;
+    --crimson:#A61C1C;
+    --cream:#FBF3DE;
+    --ink:#1A2140;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0; height:100%; overflow:hidden;}
+  body{
+    font-family:'Nunito',sans-serif;
+    background:radial-gradient(circle at 50% 0%, #23346E 0%, #0D1B4C 55%, #081029 100%);
+    color:var(--ink);
+    -webkit-user-select:none; user-select:none;
+  }
+  h1,h2,h3{font-family:'Baloo 2',cursive;}
+  .screen{
+    position:fixed; inset:0; display:none; flex-direction:column;
+    overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0) 0;
+  }
+  .screen.active{display:flex;}
+
+  /* ---------- INTRO ---------- */
+  #screen-intro{
+    align-items:center; justify-content:center; text-align:center;
+    background:radial-gradient(circle at 50% 32%, #23346E 0%, #0D1B4C 55%, #060B1E 100%);
+    cursor:pointer;
+  }
+  .intro-orn{font-size:20px; color:var(--gold); letter-spacing:10px; opacity:.8; margin-bottom:10px;}
+  .intro-title{display:flex; gap:8px; justify-content:center;}
+  .intro-letter{
+    font-family:'Cinzel',serif; font-size:58px; font-weight:700; color:var(--gold);
+    text-shadow:0 0 20px rgba(212,175,55,.55), 0 2px 0 #7a5b12;
+    opacity:0; transform:scale(.3) rotate(-18deg);
+    animation:letterIn .65s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  .intro-letter:nth-child(1){animation-delay:.15s;}
+  .intro-letter:nth-child(2){animation-delay:.30s;}
+  .intro-letter:nth-child(3){animation-delay:.45s;}
+  .intro-letter:nth-child(4){animation-delay:.60s;}
+  .intro-letter:nth-child(5){animation-delay:.75s;}
+  @keyframes letterIn{to{opacity:1; transform:scale(1) rotate(0);}}
+  .intro-line{width:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:18px auto 14px; animation:lineGrow .9s ease forwards; animation-delay:1.05s;}
+  @keyframes lineGrow{to{width:230px;}}
+  .intro-sub{font-family:'Cinzel',serif; font-size:17px; letter-spacing:11px; color:#E8D9A0; opacity:0; animation:fadeUp .7s ease forwards; animation-delay:1.15s;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+  .intro-mascot{font-size:46px; margin-top:22px; opacity:0; animation:fadeUp .7s ease forwards, bob 2.4s ease-in-out infinite 2s; animation-delay:1.5s, 0s;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  .intro-tap{font-family:'Nunito'; font-weight:700; color:#C9B37A; font-size:13px; opacity:0; animation:fadeUp .6s ease forwards; animation-delay:2.3s; margin-top:16px;}
+
+  /* ---------- HOME ---------- */
+  #screen-home{align-items:center; padding-top:22px;}
+  .home-header{text-align:center; margin-bottom:4px;}
+  .mascot-hero{font-size:54px; display:inline-block; animation:bob2 2.6s ease-in-out infinite;}
+  @keyframes bob2{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-9px) rotate(2deg);}}
+  .home-title{font-family:'Cinzel',serif; font-size:27px; font-weight:700; margin:6px 0 0; color:var(--gold); letter-spacing:2px; text-shadow:0 2px 6px rgba(0,0,0,.35);}
+  .home-sub{font-size:13.5px; font-weight:700; color:#B9C2E8; margin:5px 0 12px;}
+  .badge-count{
+    display:inline-block; background:linear-gradient(135deg,var(--gold),#B8860B); color:#3A2900; font-weight:800;
+    padding:5px 14px; border-radius:20px; font-size:12.5px; box-shadow:0 3px 0 #8a6608;
+  }
+  .card-grid{
+    width:100%; max-width:480px; padding:14px 18px 30px; display:grid;
+    grid-template-columns:1fr 1fr; gap:12px;
+  }
+  .cat-card{
+    border-radius:22px; padding:16px 14px; position:relative;
+    color:#fff; text-align:left; cursor:pointer; border:2px solid rgba(212,175,55,.55);
+    box-shadow:0 8px 0 rgba(0,0,0,0.28), 0 10px 18px rgba(0,0,0,0.25);
+    transition:transform .12s ease;
+    min-height:110px; display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .cat-card:active{transform:translateY(6px); box-shadow:0 2px 0 rgba(0,0,0,0.28);}
+  .cat-card .icon{position:absolute; top:10px; right:14px; font-size:30px; filter:drop-shadow(0 3px 2px rgba(0,0,0,.25));}
+  .cat-card .name{font-family:'Baloo 2'; font-size:16px; font-weight:700; line-height:1.15;}
+  .cat-card .qcount{font-size:11px; font-weight:700; opacity:.92; margin-top:2px;}
+  .cat-sayilar{background:linear-gradient(140deg,#B22222,#7A1414);}
+  .cat-islemler{background:linear-gradient(140deg,#1B2A5E,#0D1B4C);}
+  .cat-renkler{background:linear-gradient(140deg,#D4AF37,#9B7A1F); color:#2b1c00;}
+  .cat-renkler .qcount{color:#3a2a00;}
+  .cat-harfler{background:linear-gradient(140deg,#146C43,#0B4A2C);}
+  .cat-bulmaca{grid-column:span 2; background:linear-gradient(110deg,#5C1A78,#2E0F42 60%,#7A1414 100%);}
+  .cat-bulmaca .icon{font-size:34px;}
+  .cat-minioyun{grid-column:span 2; background:linear-gradient(110deg,#FF7043,#8E24AA 55%,#1E88E5 100%);}
+  .cat-minioyun .icon{font-size:36px;}
+  .cat-karisik{grid-column:span 2; background:linear-gradient(110deg,#B22222,#D4AF37 45%,#1B2A5E 100%);}
+  .cat-karisik .icon{font-size:36px;}
+
+  /* ---------- DIFFICULTY / MINI MENU ---------- */
+  #screen-difficulty, #screen-minihome{align-items:center; padding-top:26px;}
+  .back-btn{
+    position:absolute; top:16px; left:16px; background:var(--cream); border:2px solid var(--gold); border-radius:50%;
+    width:44px; height:44px; font-size:18px; box-shadow:0 4px 0 rgba(0,0,0,.25); cursor:pointer; color:var(--ink);
+  }
+  .diff-hero{font-size:50px; margin-top:6px;}
+  .diff-title{font-family:'Cinzel',serif; font-size:22px; font-weight:700; margin:8px 0 2px; color:var(--gold);}
+  .diff-sub{font-size:13px; font-weight:700; color:#B9C2E8; margin-bottom:20px;}
+  .diff-list{width:100%; max-width:380px; padding:0 22px; display:flex; flex-direction:column; gap:14px;}
+  .diff-btn{
+    border:2px solid rgba(212,175,55,.6); border-radius:18px; padding:15px 18px; display:flex; align-items:center; gap:12px;
+    font-family:'Baloo 2'; font-size:17px; font-weight:700; color:#fff; cursor:pointer;
+    box-shadow:0 6px 0 rgba(0,0,0,.28); text-align:left;
+  }
+  .diff-btn:active{transform:translateY(4px); box-shadow:0 2px 0 rgba(0,0,0,.28);}
+  .diff-btn .stars{font-size:13px; opacity:.95; display:block; font-family:'Nunito'; font-weight:700; margin-top:2px;}
+  .diff-kolay{background:linear-gradient(135deg,#2E8B57,#1E6B41);}
+  .diff-orta{background:linear-gradient(135deg,#D4AF37,#9B7A1F);}
+  .diff-zor{background:linear-gradient(135deg,#B22222,#7A1414);}
+
+  /* ---------- GAME (QUIZ) ---------- */
+  #screen-game{padding:0; background:#0D1B4C;}
+  .game-top, .mini-top{
+    padding:13px 16px 10px; display:flex; align-items:center; gap:9px;
+    background:linear-gradient(135deg,var(--cat1),var(--cat2)); color:#fff;
+    border-bottom-left-radius:24px; border-bottom-right-radius:24px;
+    box-shadow:0 6px 14px rgba(0,0,0,0.3); border-bottom:2px solid rgba(212,175,55,.6);
+  }
+  .mini-top{background:linear-gradient(135deg,#1B2A5E,#0D1B4C);}
+  .mini-top .title{font-family:'Baloo 2'; font-weight:700; font-size:14px; flex:1; min-width:0;}
+  .icon-btn{
+    background:rgba(255,255,255,0.22); border:1px solid rgba(212,175,55,.5); color:#fff; width:36px; height:36px;
+    border-radius:50%; font-size:16px; cursor:pointer; flex-shrink:0;
+  }
+  .top-mid{flex:1; min-width:0;}
+  .top-mid .cat-name{font-family:'Baloo 2'; font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .progress-track{background:rgba(255,255,255,0.28); height:8px; border-radius:6px; margin-top:6px; overflow:hidden;}
+  .progress-fill{background:var(--gold-lt); height:100%; border-radius:6px; transition:width .35s ease;}
+  .hearts{font-size:14px; letter-spacing:2px; flex-shrink:0;}
+  .score-pill{
+    background:rgba(255,255,255,0.22); border-radius:14px; padding:4px 10px; font-weight:800;
+    font-size:12px; flex-shrink:0; border:1px solid rgba(212,175,55,.4); white-space:nowrap;
+  }
+
+  .game-body{flex:1; display:flex; flex-direction:column; align-items:center; padding:18px 18px 90px; overflow-y:auto;}
+  .qcard{
+    width:100%; max-width:440px; background:var(--cream); border-radius:24px; padding:22px 20px;
+    box-shadow:0 10px 26px rgba(0,0,0,0.35); text-align:center; animation:popin .3s ease;
+    border:2px solid var(--gold);
+  }
+  @keyframes popin{from{transform:scale(.9); opacity:0;} to{transform:scale(1); opacity:1;}}
+  .visual{font-size:40px; line-height:1.35; margin-bottom:10px; word-break:break-word;}
+  .visual .op-sign{font-size:28px; color:var(--crimson); font-weight:800; margin:0 4px;}
+  .swatch{width:92px; height:92px; border-radius:18px; margin:0 auto; box-shadow:0 4px 12px rgba(0,0,0,0.25); border:4px solid #fff; outline:2px solid #d8c98a;}
+  .big-letter{
+    font-family:'Cinzel',serif; font-size:52px; font-weight:700; color:var(--navy2);
+    background:#EFE3BE; border-radius:16px; padding:6px 0; margin-bottom:2px; border:1px solid #d8c98a;
+  }
+  .qtext{font-family:'Baloo 2'; font-size:19px; font-weight:700; margin:8px 0 18px; color:var(--ink);}
+  .alpha-strip{font-size:10.5px; font-weight:700; color:#8a7a4a; letter-spacing:2px; margin-bottom:10px;}
+  .options{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .opt-btn{
+    border:1.5px solid #E3D6A6; border-radius:15px; padding:15px 8px; font-family:'Nunito'; font-weight:800;
+    font-size:16px; background:#FFFCF3; color:var(--ink); cursor:pointer;
+    box-shadow:0 4px 0 #DDCB90; transition:transform .08s ease;
+  }
+  .opt-btn:active{transform:translateY(3px); box-shadow:0 1px 0 #DDCB90;}
+  .opt-btn.correct{background:#2E8B57; color:#fff; box-shadow:0 4px 0 #1E6B41; border-color:transparent;}
+  .opt-btn.wrong{background:#B22222; color:#fff; box-shadow:0 4px 0 #7A1414; animation:shake .35s ease; border-color:transparent;}
+  .opt-btn[disabled]{pointer-events:none; opacity:.9;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+
+  .mascot-wrap{
+    position:fixed; left:0; right:0; bottom:14px; display:flex; justify-content:center;
+    pointer-events:none; z-index:5;
+  }
+  .mascot-bubble{
+    display:none; align-items:center; gap:10px; background:var(--cream); border:1.5px solid var(--gold); border-radius:22px;
+    padding:9px 16px 9px 10px; box-shadow:0 8px 20px rgba(0,0,0,0.3); max-width:340px;
+    animation:popin .25s ease;
+  }
+  .mascot-bubble.show{display:flex;}
+  .mascot-emoji{font-size:30px; animation:bounce2 .5s ease;}
+  @keyframes bounce2{0%{transform:scale(.6) rotate(-10deg);}60%{transform:scale(1.15) rotate(5deg);}100%{transform:scale(1) rotate(0);}}
+  .mascot-text{font-family:'Baloo 2'; font-weight:700; font-size:14.5px; color:var(--ink);}
+
+  /* ---------- RESULT ---------- */
+  #screen-result{align-items:center; justify-content:center; text-align:center; padding:20px;}
+  .result-card{
+    background:var(--cream); border:2px solid var(--gold); border-radius:26px; padding:30px 26px; max-width:380px; width:100%;
+    box-shadow:0 14px 30px rgba(0,0,0,0.4); animation:popin .35s ease;
+  }
+  .result-emoji{font-size:54px;}
+  .result-title{font-family:'Cinzel',serif; font-size:22px; font-weight:700; margin:8px 0 4px; color:var(--navy2);}
+  .stars-row{font-size:36px; letter-spacing:6px; margin:10px 0;}
+  .result-stats{font-size:14.5px; font-weight:700; color:#5C6BC0; margin-bottom:22px;}
+  .result-btns{display:flex; flex-direction:column; gap:12px;}
+  .rbtn{
+    border:none; border-radius:16px; padding:14px; font-family:'Baloo 2'; font-weight:700;
+    font-size:16px; cursor:pointer; color:#fff; box-shadow:0 5px 0 rgba(0,0,0,.28);
+  }
+  .rbtn:active{transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.28);}
+  .rbtn.retry{background:linear-gradient(135deg,#B22222,#7A1414);}
+  .rbtn.home{background:linear-gradient(135deg,#1B2A5E,#0D1B4C);}
+
+  /* ---------- CONFETTI ---------- */
+  .confetti-piece{
+    position:fixed; top:-10px; width:9px; height:14px; z-index:50; pointer-events:none;
+    border-radius:2px; animation:fall linear forwards;
+  }
+  @keyframes fall{to{transform:translateY(115vh) rotate(420deg); opacity:0.2;}}
+
+  /* ---------- MEMORY GAME ---------- */
+  #memoryGrid{display:grid; grid-template-columns:repeat(4,1fr); gap:9px; width:100%; max-width:360px; margin:0 auto;}
+  .mem-card{aspect-ratio:1; perspective:600px; background:transparent; border:none; padding:0; cursor:pointer;}
+  .mem-inner{position:relative; width:100%; height:100%; transform-style:preserve-3d; transition:transform .4s ease; border-radius:14px;}
+  .mem-card.flipped .mem-inner, .mem-card.matched .mem-inner{transform:rotateY(180deg);}
+  .mem-back, .mem-front{position:absolute; inset:0; backface-visibility:hidden; border-radius:14px; display:flex; align-items:center; justify-content:center;}
+  .mem-back{background:linear-gradient(135deg,#1B2A5E,#0D1B4C); color:var(--gold); border:2px solid var(--gold); font-family:'Cinzel'; font-size:18px;}
+  .mem-front{background:var(--cream); border:2px solid var(--gold); transform:rotateY(180deg); font-size:28px;}
+  .mem-card.matched .mem-front{background:#DFF3E4; border-color:#2E8B57;}
+
+  /* ---------- BALLOON GAME ---------- */
+  #balloonArea{position:relative; flex:1; overflow:hidden; background:linear-gradient(180deg,#BBE4FB,#E9F7EF);}
+  .balloon{
+    position:absolute; bottom:-80px; width:58px; height:70px;
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800;
+    font-family:'Baloo 2'; font-size:19px; box-shadow:0 4px 10px rgba(0,0,0,.25); cursor:pointer;
+    animation-name:riseUp; animation-timing-function:linear; animation-fill-mode:forwards;
+  }
+  .balloon::after{
+    content:''; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+    width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:8px solid rgba(0,0,0,.2);
+  }
+  @keyframes riseUp{ to{ transform:translateY(-720px); } }
+
+  /* ---------- WHACK GAME ---------- */
+  #whackGrid{display:grid; grid-template-columns:repeat(3,1fr); gap:13px; width:100%; max-width:320px; margin:0 auto;}
+  .whack-hole{
+    position:relative; aspect-ratio:1; border-radius:50%; padding:0; cursor:pointer;
+    background:radial-gradient(circle at 50% 40%,#6D4C41,#3E2723); border:3px solid #2b1c14; overflow:hidden;
+  }
+  .whack-letter{
+    position:absolute; left:50%; top:120%; transform:translate(-50%,0);
+    font-family:'Cinzel',serif; font-weight:700; font-size:24px; color:#fff;
+    background:linear-gradient(135deg,var(--gold),#9B7A1F);
+    width:72%; height:72%; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    transition:top .18s ease; box-shadow:0 4px 10px rgba(0,0,0,.3);
+  }
+  .whack-hole.up .whack-letter{top:14%;}
+
+  @media (min-width:520px){
+    .card-grid{max-width:520px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO SCREEN -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-orn">۞ ☾ ⋆ ☽ ۞</div>
+  <div class="intro-title">
+    <span class="intro-letter">A</span><span class="intro-letter">S</span><span class="intro-letter">K</span><span class="intro-letter">A</span><span class="intro-letter">R</span>
+  </div>
+  <div class="intro-line"></div>
+  <div class="intro-sub">M E K T E P</div>
+  <div class="intro-mascot">🦁</div>
+  <div class="intro-tap">Başlamak için dokun</div>
+</div>
+
+<!-- HOME SCREEN -->
+<div class="screen" id="screen-home">
+  <div class="home-header">
+    <div class="mascot-hero">🦁</div>
+    <div class="home-title">ASKAR MEKTEP</div>
+    <div class="home-sub">Aslan Askar ile eğlenerek öğren!</div>
+    <div class="badge-count">✨ 225 Soru + 3 Mini Oyun!</div>
+  </div>
+  <div class="card-grid">
+    <button class="cat-card cat-sayilar" data-cat="sayilar">
+      <div class="icon">🔢</div>
+      <div class="name">Sayılar<br>Adası</div>
+      <div class="qcount">45 soru · 3 seviye</div>
+    </button>
+    <button class="cat-card cat-islemler" data-cat="islemler">
+      <div class="icon">➕</div>
+      <div class="name">İşlemler<br>Adası</div>
+      <div class="qcount">45 soru · 3 seviye</div>
+    </button>
+    <button class="cat-card cat-renkler" data-cat="renkler">
+      <div class="icon">🎨</div>
+      <div class="name">Renkler<br>Adası</div>
+      <div class="qcount">45 soru · 3 seviye</div>
+    </button>
+    <button class="cat-card cat-harfler" data-cat="harfler">
+      <div class="icon">🔤</div>
+      <div class="name">Harfler<br>Adası</div>
+      <div class="qcount">45 soru · 3 seviye</div>
+    </button>
+    <button class="cat-card cat-bulmaca" data-cat="bulmaca">
+      <div class="icon">🧩</div>
+      <div class="name">Bulmaca Kışlası</div>
+      <div class="qcount">45 soru · desenler, bilmeceler ve daha fazlası!</div>
+    </button>
+    <button class="cat-card cat-minioyun" data-cat="minioyunlar">
+      <div class="icon">🎮</div>
+      <div class="name">Mini Oyunlar</div>
+      <div class="qcount">Hafıza, Balon, Harf Kaplanı — 3 eğlenceli oyun!</div>
+    </button>
+    <button class="cat-card cat-karisik" data-cat="karisik">
+      <div class="icon">🌈</div>
+      <div class="name">Karışık Macera</div>
+      <div class="qcount">Her kışladan karışık 10 soru!</div>
+    </button>
+  </div>
+</div>
+
+<!-- DIFFICULTY SCREEN -->
+<div class="screen" id="screen-difficulty">
+  <button class="back-btn" id="diffBack">←</button>
+  <div style="text-align:center; margin-top:8px;">
+    <div class="diff-hero" id="diffIcon">🔢</div>
+    <div class="diff-title" id="diffTitle">Sayılar Adası</div>
+    <div class="diff-sub">Bir zorluk seviyesi seç</div>
+  </div>
+  <div class="diff-list">
+    <button class="diff-btn diff-kolay" data-diff="kolay">
+      <span>🌱</span>
+      <span>Kolay<span class="stars">⭐ Yeni başlayanlar için</span></span>
+    </button>
+    <button class="diff-btn diff-orta" data-diff="orta">
+      <span>🌟</span>
+      <span>Orta<span class="stars">⭐⭐ Biraz düşünmen gerekecek</span></span>
+    </button>
+    <button class="diff-btn diff-zor" data-diff="zor">
+      <span>🔥</span>
+      <span>Zor<span class="stars">⭐⭐⭐ Gerçek bir askar için</span></span>
+    </button>
+  </div>
+</div>
+
+<!-- MINI GAMES MENU -->
+<div class="screen" id="screen-minihome">
+  <button class="back-btn" id="miniBack">←</button>
+  <div style="text-align:center; margin-top:8px;">
+    <div class="diff-hero">🎮</div>
+    <div class="diff-title">Mini Oyunlar</div>
+    <div class="diff-sub">Eğlenmeye hazır mısın?</div>
+  </div>
+  <div class="diff-list">
+    <button class="diff-btn" id="btnMemory" style="background:linear-gradient(135deg,#8E24AA,#5C1A78);">
+      <span>🧠</span><span>Hafıza Kartları<span class="stars">Eşleri bul, hafızanı test et!</span></span>
+    </button>
+    <button class="diff-btn" id="btnBalloonGame" style="background:linear-gradient(135deg,#1E88E5,#0D3C7A);">
+      <span>🎈</span><span>Sayı Balonu<span class="stars">Sırayla balonları patlat!</span></span>
+    </button>
+    <button class="diff-btn" id="btnWhackGame" style="background:linear-gradient(135deg,#6D4C41,#3E2723);">
+      <span>🦁</span><span>Harf Kaplanı<span class="stars">Doğru harfi hızlıca yakala!</span></span>
+    </button>
+  </div>
+</div>
+
+<!-- GAME SCREEN (QUIZ) -->
+<div class="screen" id="screen-game">
+  <div class="game-top">
+    <button class="icon-btn" id="gameHome">🏠</button>
+    <div class="top-mid">
+      <div class="cat-name" id="gameCatName">Sayılar Adası</div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="hearts" id="hearts">❤️❤️❤️</div>
+    <div class="score-pill" id="scorePill">0 ⭐</div>
+    <button class="icon-btn" id="muteBtn">🔊</button>
+  </div>
+  <div class="game-body">
+    <div class="qcard" id="qcard">
+      <div class="visual" id="qVisual"></div>
+      <div class="alpha-strip" id="alphaStrip" style="display:none;"></div>
+      <div class="qtext" id="qText"></div>
+      <div class="options" id="qOptions"></div>
+    </div>
+  </div>
+  <div class="mascot-wrap">
+    <div class="mascot-bubble" id="mascotBubble">
+      <div class="mascot-emoji" id="mascotEmoji">🦁</div>
+      <div class="mascot-text" id="mascotText">Hadi başlayalım!</div>
+    </div>
+  </div>
+</div>
+
+<!-- MEMORY GAME SCREEN -->
+<div class="screen" id="screen-memory">
+  <div class="mini-top">
+    <button class="icon-btn" id="memoryBack">🏠</button>
+    <div class="title">🧠 Hafıza Kartları</div>
+    <div class="score-pill" id="memoryMoves">0 hamle</div>
+    <div class="score-pill" id="memoryPairs">0 / 8</div>
+  </div>
+  <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:16px;">
+    <div id="memoryGrid"></div>
+  </div>
+</div>
+
+<!-- BALLOON GAME SCREEN -->
+<div class="screen" id="screen-balloon">
+  <div class="mini-top">
+    <button class="icon-btn" id="balloonBack">🏠</button>
+    <div class="title">🎈 Sıradaki Sayı: <span id="balloonTarget">1</span></div>
+    <div class="hearts" id="balloonLives">❤️❤️❤️</div>
+    <div class="score-pill" id="balloonScore">0 ⭐</div>
+  </div>
+  <div id="balloonArea"></div>
+</div>
+
+<!-- WHACK-A-MOLE GAME SCREEN -->
+<div class="screen" id="screen-whack">
+  <div class="mini-top">
+    <button class="icon-btn" id="whackBack">🏠</button>
+    <div class="title">🦁 Bul: <span id="whackTarget">K</span></div>
+    <div class="hearts" id="whackLives">❤️❤️❤️</div>
+    <div class="score-pill" id="whackScore">0 ⭐</div>
+  </div>
+  <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div id="whackGrid"></div>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div class="screen" id="screen-result">
+  <div class="result-card">
+    <div class="result-emoji" id="resultEmoji">🎉</div>
+    <div class="result-title" id="resultTitle">Harikasın!</div>
+    <div class="stars-row" id="resultStars">⭐⭐⭐</div>
+    <div class="result-stats" id="resultStats">10 sorudan 10 doğru!</div>
+    <div class="result-btns">
+      <button class="rbtn retry" id="btnRetry">🔁 Tekrar Oyna</button>
+      <button class="rbtn home" id="btnHome">🏠 Ana Sayfa</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= UTIL ================= */
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function numOpts(correct, lo, hi){
+  const opts = new Set([String(correct)]);
+  let guard=0;
+  while(opts.size<4 && guard<200){
+    const n = Math.floor(Math.random()*(hi-lo+1))+lo;
+    opts.add(String(n));
+    guard++;
+  }
+  return Array.from(opts);
+}
+function repeatEmoji(e,n){ let s=''; for(let i=0;i<n;i++) s+=e; return s; }
+function el(id){ return document.getElementById(id); }
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  el(id).classList.add('active');
+}
+
+/* ================= AUDIO ================= */
+let audioCtx = null;
+let muted = false;
+function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } }
+function tone(freq, start, dur, type, vol){
+  if(muted || !audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type||'sine';
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, audioCtx.currentTime+start);
+  gain.gain.linearRampToValueAtTime(vol||0.18, audioCtx.currentTime+start+0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+start+dur);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(audioCtx.currentTime+start);
+  osc.stop(audioCtx.currentTime+start+dur+0.02);
+}
+function sfxCorrect(){ ensureAudio(); tone(523,0,0.14,'sine',0.16); tone(659,0.1,0.18,'sine',0.16); tone(784,0.2,0.22,'sine',0.16); }
+function sfxWrong(){ ensureAudio(); tone(220,0,0.25,'sawtooth',0.13); }
+function sfxComplete(){ ensureAudio(); tone(523,0,0.15,'sine',0.17); tone(659,0.15,0.15,'sine',0.17); tone(784,0.3,0.15,'sine',0.17); tone(1046,0.45,0.3,'sine',0.18); }
+
+/* ================= CONFETTI ================= */
+const CONFETTI_COLORS = ['#D4AF37','#B22222','#1B2A5E','#2E8B57','#F0DA9A','#FBF3DE'];
+function burstConfetti(n){
+  for(let i=0;i<n;i++){
+    const d = document.createElement('div');
+    d.className='confetti-piece';
+    d.style.left = (Math.random()*100)+'vw';
+    d.style.background = CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
+    d.style.animationDuration = (1.6+Math.random()*1.2)+'s';
+    d.style.opacity = String(0.8+Math.random()*0.2);
+    d.style.transform = 'rotate('+Math.floor(Math.random()*360)+'deg)';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(), 3000);
+  }
+}
+
+/* ================= QUIZ DATA ================= */
+const ALPHA = "A B C Ç D E F G Ğ H I İ J K L M N O Ö P R S Ş T U Ü V Y Z";
+const DATA = { sayilar:{}, islemler:{}, renkler:{}, harfler:{}, bulmaca:{} };
+
+/* ---- SAYILAR ---- */
+const countItems = [
+  [1,'🍎'],[2,'⭐'],[3,'🎈'],[4,'🐱'],[5,'🚗'],[6,'🌸'],[7,'🍦'],[8,'🦋'],[9,'🍓'],[10,'🐠'],
+  [3,'🐶'],[5,'🍕'],[7,'🐤'],[9,'🎁'],[10,'🧸']
+];
+DATA.sayilar.kolay = countItems.map(([n,e])=>({
+  v: repeatEmoji(e,n), t:"Kaç tane var?", o: numOpts(n,1,10), c:String(n)
+}));
+
+DATA.sayilar.orta = [
+  {v:'🔢', t:"5'ten sonra hangi sayı gelir?", o:['4','6','7','5'], c:'6'},
+  {v:'🔢', t:"9'dan önce hangi sayı gelir?", o:['8','10','7','9'], c:'8'},
+  {v:'🔢', t:"12'den sonra hangi sayı gelir?", o:['11','13','14','10'], c:'13'},
+  {v:'🔢', t:"15'ten önce hangi sayı gelir?", o:['16','13','14','15'], c:'14'},
+  {v:'🔢', t:"Hangisi 10'dan büyüktür?", o:['8','10','12','7'], c:'12'},
+  {v:'🔢', t:"Hangisi 20'den küçüktür?", o:['25','22','18','30'], c:'18'},
+  {v:'🔢', t:"10, 20, 30, ... sırada hangi sayı gelir?", o:['35','40','45','50'], c:'40'},
+  {v:'🔢', t:"2, 4, 6, 8, ... sırada hangi sayı gelir?", o:['9','10','12','11'], c:'10'},
+  {v:'🔢', t:"Hangisi en büyük sayıdır?", o:['45','32','58','19'], c:'58'},
+  {v:'🔢', t:"Hangisi en küçük sayıdır?", o:['23','9','41','17'], c:'9'},
+  {v:'🔢', t:"3'ten sonra hangi sayı gelir?", o:['2','4','5','3'], c:'4'},
+  {v:'🔢', t:"18'den önce hangi sayı gelir?", o:['19','17','16','18'], c:'17'},
+  {v:'🔢', t:"5, 10, 15, ... sırada hangi sayı gelir?", o:['18','20','25','16'], c:'20'},
+  {v:'🔢', t:"1, 3, 5, 7, ... sırada hangi sayı gelir?", o:['8','9','10','11'], c:'9'},
+  {v:'🔢', t:"27, 28, 29, ... sırada hangi sayı gelir?", o:['30','31','26','32'], c:'30'}
+];
+
+DATA.sayilar.zor = [
+  {v:'🔢', t:"34 sayısının onlar basamağı kaçtır?", o:['3','4','7','34'], c:'3'},
+  {v:'🔢', t:"47 sayısının birler basamağı kaçtır?", o:['4','7','47','11'], c:'7'},
+  {v:'🔢', t:"Hangisi çift sayıdır?", o:['13','22','35','41'], c:'22'},
+  {v:'🔢', t:"Hangisi tek sayıdır?", o:['18','24','31','40'], c:'31'},
+  {v:'🔢', t:"20'den büyük, 30'dan küçük olan çift sayı hangisidir?", o:['22','31','35','19'], c:'22'},
+  {v:'🔢', t:"23 sayısı hangi iki onluk arasındadır?", o:['20-30','10-20','30-40','40-50'], c:'20-30'},
+  {v:'🔢', t:"45 sayısı yazıyla nasıl yazılır?", o:['Kırk beş','Elli dört','Otuz beş','Kırk dört'], c:'Kırk beş'},
+  {v:'🔢', t:'"Doksan" sayısı rakamla nasıl yazılır?', o:['19','90','9','900'], c:'90'},
+  {v:'🔢', t:"100 sayısının yarısı kaçtır?", o:['40','50','60','25'], c:'50'},
+  {v:'🔢', t:"3 onluk 5 birlik hangi sayıyı oluşturur?", o:['35','53','30','15'], c:'35'},
+  {v:'🔢', t:"56 sayısının onlar basamağı kaçtır?", o:['5','6','56','11'], c:'5'},
+  {v:'🔢', t:"78 sayısının birler basamağı kaçtır?", o:['7','8','78','15'], c:'8'},
+  {v:'🔢', t:"Hangisi çift sayıdır?", o:['51','64','73','89'], c:'64'},
+  {v:'🔢', t:"Hangisi tek sayıdır?", o:['26','38','47','52'], c:'47'},
+  {v:'🔢', t:"4 onluk 2 birlik hangi sayıyı oluşturur?", o:['42','24','40','20'], c:'42'}
+];
+
+/* ---- İŞLEMLER ---- */
+const addItems = [
+  [1,1,'🍎'],[2,1,'⭐'],[1,2,'🎈'],[2,2,'🐱'],[3,1,'🚗'],[1,3,'🌸'],[2,3,'🍦'],[3,2,'🦋'],[4,1,'🍓'],[1,4,'🐠'],
+  [2,4,'🍭'],[4,2,'🎁'],[3,3,'🎨'],[1,5,'🐝'],[5,1,'🌼']
+];
+DATA.islemler.kolay = addItems.map(([a,b,e])=>({
+  v: repeatEmoji(e,a)+' <span class="op-sign">+</span> '+repeatEmoji(e,b),
+  t: a+' + '+b+' = ?', o: numOpts(a+b,1,9), c:String(a+b)
+}));
+
+DATA.islemler.orta = [
+  {v:'➕', t:'5 + 3 = ?', o:['7','8','9','6'], c:'8'},
+  {v:'➕', t:'7 + 2 = ?', o:['8','9','10','7'], c:'9'},
+  {v:'➕', t:'6 + 4 = ?', o:['9','10','11','8'], c:'10'},
+  {v:'➖', t:'9 − 3 = ?', o:['5','6','7','4'], c:'6'},
+  {v:'➖', t:'8 − 5 = ?', o:['2','3','4','5'], c:'3'},
+  {v:'➖', t:'10 − 4 = ?', o:['5','6','7','4'], c:'6'},
+  {v:'➕', t:'4 + 4 = ?', o:['7','8','9','6'], c:'8'},
+  {v:'➖', t:'7 − 6 = ?', o:['0','1','2','3'], c:'1'},
+  {v:'➕', t:'6 + 3 = ?', o:['8','9','10','7'], c:'9'},
+  {v:'➖', t:'10 − 7 = ?', o:['2','3','4','5'], c:'3'},
+  {v:'➕', t:'8 + 4 = ?', o:['11','12','13','10'], c:'12'},
+  {v:'➕', t:'9 + 5 = ?', o:['13','14','15','12'], c:'14'},
+  {v:'➖', t:'10 − 6 = ?', o:['3','4','5','2'], c:'4'},
+  {v:'➖', t:'9 − 4 = ?', o:['4','5','6','3'], c:'5'},
+  {v:'➕', t:'7 + 5 = ?', o:['11','12','13','10'], c:'12'}
+];
+
+DATA.islemler.zor = [
+  {v:'✖️', t:'2 × 3 = ?', o:['5','6','7','8'], c:'6'},
+  {v:'✖️', t:'3 × 3 = ?', o:['6','9','12','3'], c:'9'},
+  {v:'✖️', t:'2 × 4 = ?', o:['6','8','10','4'], c:'8'},
+  {v:'✖️', t:'4 × 2 = ?', o:['6','8','10','4'], c:'8'},
+  {v:'➗', t:'10 ÷ 2 = ?', o:['4','5','6','2'], c:'5'},
+  {v:'➗', t:'8 ÷ 2 = ?', o:['3','4','5','2'], c:'4'},
+  {v:'➗', t:'6 ÷ 3 = ?', o:['1','2','3','6'], c:'2'},
+  {v:'➕', t:'15 + 12 = ?', o:['25','26','27','28'], c:'27'},
+  {v:'➖', t:'25 − 13 = ?', o:['10','11','12','13'], c:'12'},
+  {v:'➕', t:'34 + 15 = ?', o:['47','48','49','50'], c:'49'},
+  {v:'✖️', t:'5 × 2 = ?', o:['8','10','12','7'], c:'10'},
+  {v:'✖️', t:'3 × 4 = ?', o:['10','11','12','13'], c:'12'},
+  {v:'➗', t:'12 ÷ 3 = ?', o:['3','4','5','6'], c:'4'},
+  {v:'➖', t:'20 − 8 = ?', o:['10','11','12','13'], c:'12'},
+  {v:'➕', t:'28 + 14 = ?', o:['40','41','42','43'], c:'42'}
+];
+
+/* ---- RENKLER ---- */
+const colorList = [
+  ["Kırmızı","#E53935"],["Mavi","#1E88E5"],["Sarı","#FDD835"],["Yeşil","#43A047"],["Turuncu","#FB8C00"],
+  ["Mor","#8E24AA"],["Pembe","#EC407A"],["Kahverengi","#6D4C41"],["Siyah","#212121"],["Gri","#9E9E9E"],
+  ["Lacivert","#1A237E"],["Turkuaz","#00ACC1"],["Bej","#D7CCC8"],["Altın","#DAA520"],["Açık Yeşil","#AED581"]
+];
+DATA.renkler.kolay = colorList.map(([name,hex])=>{
+  const others = shuffle(colorList.filter(c=>c[0]!==name)).slice(0,3).map(c=>c[0]);
+  return {v:'<div class="swatch" style="background:'+hex+'"></div>', t:"Bu hangi renk?", o:shuffle([name,...others]), c:name};
+});
+
+DATA.renkler.orta = [
+  {v:'🍎', t:'Elma genellikle hangi renktir?', o:['Kırmızı','Mavi','Yeşil','Sarı'], c:'Kırmızı'},
+  {v:'🍌', t:'Muz hangi renktir?', o:['Sarı','Mor','Kırmızı','Gri'], c:'Sarı'},
+  {v:'🥕', t:'Havuç hangi renktir?', o:['Turuncu','Mavi','Siyah','Beyaz'], c:'Turuncu'},
+  {v:'🍇', t:'Üzüm hangi renktir?', o:['Mor','Kırmızı','Sarı','Yeşil'], c:'Mor'},
+  {v:'🌿', t:'Yaprak hangi renktir?', o:['Yeşil','Turuncu','Pembe','Gri'], c:'Yeşil'},
+  {v:'☁️', t:'Bulut hangi renktir?', o:['Beyaz','Siyah','Mavi','Sarı'], c:'Beyaz'},
+  {v:'🐘', t:'Fil hangi renktir?', o:['Gri','Pembe','Yeşil','Turuncu'], c:'Gri'},
+  {v:'🍫', t:'Çikolata hangi renktir?', o:['Kahverengi','Sarı','Mavi','Mor'], c:'Kahverengi'},
+  {v:'🌊', t:'Deniz hangi renktir?', o:['Mavi','Kırmızı','Sarı','Turuncu'], c:'Mavi'},
+  {v:'🐷', t:'Domuz hangi renktir?', o:['Pembe','Yeşil','Mor','Siyah'], c:'Pembe'},
+  {v:'🌻', t:'Ayçiçeği hangi renktir?', o:['Sarı','Mavi','Mor','Siyah'], c:'Sarı'},
+  {v:'🍉', t:'Karpuzun içi hangi renktir?', o:['Kırmızı','Yeşil','Mavi','Sarı'], c:'Kırmızı'},
+  {v:'🦁', t:'Aslan hangi renktir?', o:['Turuncu','Mavi','Yeşil','Mor'], c:'Turuncu'},
+  {v:'🐧', t:'Penguen hangi renklerdedir?', o:['Siyah-Beyaz','Kırmızı-Sarı','Mavi-Yeşil','Mor-Pembe'], c:'Siyah-Beyaz'},
+  {v:'🌈', t:'Gökkuşağında kaç renk vardır?', o:['7','5','3','9'], c:'7'}
+];
+
+DATA.renkler.zor = [
+  {v:'🎨', t:'Kırmızı ile Sarı karışırsa hangi renk olur?', o:['Turuncu','Yeşil','Mor','Mavi'], c:'Turuncu'},
+  {v:'🎨', t:'Mavi ile Sarı karışırsa hangi renk olur?', o:['Yeşil','Turuncu','Mor','Pembe'], c:'Yeşil'},
+  {v:'🎨', t:'Kırmızı ile Mavi karışırsa hangi renk olur?', o:['Mor','Turuncu','Yeşil','Sarı'], c:'Mor'},
+  {v:'🎨', t:'Beyaz ile Siyah karışırsa hangi renk olur?', o:['Gri','Kahverengi','Mavi','Bej'], c:'Gri'},
+  {v:'☁️', t:'Gökyüzünün açık ve canlı mavi tonuna ne denir?', o:['Turkuaz','Lacivert','Mor','Kahverengi'], c:'Turkuaz'},
+  {v:'🌌', t:'Gece gökyüzünün koyu mavisine ne denir?', o:['Lacivert','Turkuaz','Bej','Gri'], c:'Lacivert'},
+  {v:'🏖️', t:'Kumun rengine ne denir?', o:['Bej','Mor','Lacivert','Siyah'], c:'Bej'},
+  {v:'👑', t:'Parlayan altın kaplamanın rengi nedir?', o:['Altın','Gümüş','Bakır','Bronz'], c:'Altın'},
+  {v:'🌲', t:'Ormanın koyu yeşil tonuna ne denir?', o:['Koyu yeşil','Açık yeşil','Turkuaz','Sarı yeşil'], c:'Koyu yeşil'},
+  {v:'❄️', t:'Karın rengi nedir?', o:['Beyaz','Gri','Mavi','Mor'], c:'Beyaz'},
+  {v:'🎨', t:'Yeşil ile Mavi karışırsa hangi renk elde edilir?', o:['Turkuaz','Mor','Kahverengi','Pembe'], c:'Turkuaz'},
+  {v:'🎨', t:'Kırmızı ile Beyaz karışırsa hangi renk olur?', o:['Pembe','Mor','Turuncu','Gri'], c:'Pembe'},
+  {v:'🍂', t:'Sonbahar yapraklarının rengine ne denir?', o:['Kahverengi','Mavi','Mor','Turkuaz'], c:'Kahverengi'},
+  {v:'🌙', t:'Ayın rengine en yakın hangisidir?', o:['Gümüş','Altın','Kırmızı','Yeşil'], c:'Gümüş'},
+  {v:'🍯', t:'Balın rengine ne denir?', o:['Altın','Gümüş','Turkuaz','Lacivert'], c:'Altın'}
+];
+
+/* ---- HARFLER ---- */
+const caseList = [
+  ["A","a",["a","e","o","u"]],["B","b",["b","d","p","g"]],["E","e",["e","a","ö","i"]],["K","k",["k","h","l","t"]],
+  ["M","m",["m","n","h","u"]],["O","o",["o","ö","a","u"]],["S","s",["s","ş","z","c"]],["T","t",["t","l","i","f"]],
+  ["Y","y",["y","v","h","k"]],["D","d",["d","b","p","g"]],
+  ["N","n",["n","m","h","r"]],["L","l",["l","t","i","h"]],["G","g",["g","ğ","y","h"]],["R","r",["r","n","z","v"]],["Z","z",["z","s","c","ş"]]
+];
+DATA.harfler.kolay = caseList.map(([up,low,opts])=>({
+  v:'<div class="big-letter">'+up+'</div>', t:'"'+up+'" harfinin küçük hali hangisidir?', o:shuffle(opts), c:low
+}));
+
+DATA.harfler.orta = [
+  {v:'🐱<br>Kedi', t:'"Kedi" kelimesi hangi harfle başlar?', o:['K','T','B','M'], c:'K'},
+  {v:'🐘<br>Fil', t:'"Fil" kelimesi hangi harfle başlar?', o:['F','V','P','L'], c:'F'},
+  {v:'⚽<br>Top', t:'"Top" kelimesi hangi harfle başlar?', o:['T','D','P','B'], c:'T'},
+  {v:'🍎<br>Elma', t:'"Elma" kelimesi hangi harfle başlar?', o:['E','A','İ','O'], c:'E'},
+  {v:'🪑<br>Masa', t:'"Masa" kelimesi hangi harfle başlar?', o:['M','N','S','B'], c:'M'},
+  {v:'💧<br>Su', t:'"Su" kelimesi hangi harfle başlar?', o:['S','Ş','Z','C'], c:'S'},
+  {v:'✨<br>Yıldız', t:'"Yıldız" kelimesi hangi harfle başlar?', o:['Y','V','I','İ'], c:'Y'},
+  {v:'🌊<br>Deniz', t:'"Deniz" kelimesi hangi harfle başlar?', o:['D','T','Ç','B'], c:'D'},
+  {v:'☀️<br>Güneş', t:'"Güneş" kelimesi hangi harfle başlar?', o:['G','Ğ','K','H'], c:'G'},
+  {v:'🎈<br>Balon', t:'"Balon" kelimesi hangi harfle başlar?', o:['B','P','D','V'], c:'B'},
+  {v:'🦒<br>Zürafa', t:'"Zürafa" kelimesi hangi harfle başlar?', o:['Z','J','V','Y'], c:'Z'},
+  {v:'🍊<br>Portakal', t:'"Portakal" kelimesi hangi harfle başlar?', o:['P','B','T','D'], c:'P'},
+  {v:'🐍<br>Yılan', t:'"Yılan" kelimesi hangi harfle başlar?', o:['Y','V','I','İ'], c:'Y'},
+  {v:'🕷️<br>Örümcek', t:'"Örümcek" kelimesi hangi harfle başlar?', o:['Ö','O','Ü','U'], c:'Ö'},
+  {v:'🍓<br>Çilek', t:'"Çilek" kelimesi hangi harfle başlar?', o:['Ç','C','Ş','S'], c:'Ç'}
+];
+
+DATA.harfler.zor = [
+  {v:ALPHA, t:'"A" harfinden sonra hangi harf gelir?', o:['B','C','Ç','D'], c:'B'},
+  {v:ALPHA, t:'"B" harfinden önce hangi harf gelir?', o:['A','C','Ç','D'], c:'A'},
+  {v:ALPHA, t:'"C" harfinden sonra hangi harf gelir?', o:['B','Ç','D','E'], c:'Ç'},
+  {v:ALPHA, t:'"D" harfinden önce hangi harf gelir?', o:['C','Ç','E','B'], c:'Ç'},
+  {v:ALPHA, t:'"K" harfinden sonra hangi harf gelir?', o:['J','L','M','I'], c:'L'},
+  {v:ALPHA, t:'"M" harfinden önce hangi harf gelir?', o:['K','L','N','O'], c:'L'},
+  {v:ALPHA, t:'"S" harfinden sonra hangi harf gelir?', o:['R','Ş','T','Z'], c:'Ş'},
+  {v:'🏁', t:'Alfabemizin son harfi hangisidir?', o:['Y','V','Z','T'], c:'Z'},
+  {v:'🔤', t:'Hangisi bir sesli (ünlü) harftir?', o:['A','K','T','S'], c:'A'},
+  {v:'🔤', t:'Hangisi bir sessiz (ünsüz) harftir?', o:['E','İ','M','U'], c:'M'},
+  {v:ALPHA, t:'"O" harfinden sonra hangi harf gelir?', o:['N','Ö','P','R'], c:'Ö'},
+  {v:ALPHA, t:'"T" harfinden önce hangi harf gelir?', o:['Ş','U','R','S'], c:'Ş'},
+  {v:ALPHA, t:'"H" harfinden sonra hangi harf gelir?', o:['G','I','İ','J'], c:'I'},
+  {v:'🔤', t:'Hangisi bir sesli (ünlü) harftir?', o:['Ö','Y','Z','H'], c:'Ö'},
+  {v:'🔤', t:'Hangisi bir sessiz (ünsüz) harftir?', o:['İ','O','R','Ü'], c:'R'}
+];
+
+/* ---- BULMACA ---- */
+DATA.bulmaca.kolay = [
+  {v:'🔴🔵🔴🔵🔴❓', t:'Sırada hangisi gelmeli?', o:['🔴','🔵','🟡','🟢'], c:'🔵'},
+  {v:'⭐🌙⭐🌙⭐❓', t:'Sırada hangisi gelmeli?', o:['⭐','🌙','☀️','🌟'], c:'🌙'},
+  {v:'🍎🍌🍎🍌🍎❓', t:'Sırada hangisi gelmeli?', o:['🍎','🍌','🍇','🍊'], c:'🍌'},
+  {v:'🐱🐶🐱🐶🐱❓', t:'Sırada hangisi gelmeli?', o:['🐱','🐶','🐭','🐰'], c:'🐶'},
+  {v:'🔺🔻🔺🔻🔺❓', t:'Sırada hangisi gelmeli?', o:['🔺','🔻','⬛','⬜'], c:'🔻'},
+  {v:'🟩🟦🟩🟦🟩❓', t:'Sırada hangisi gelmeli?', o:['🟩','🟦','🟨','🟥'], c:'🟦'},
+  {v:'🍀🌸🍀🌸🍀❓', t:'Sırada hangisi gelmeli?', o:['🍀','🌸','🌻','🍁'], c:'🌸'},
+  {v:'1️⃣2️⃣1️⃣2️⃣1️⃣❓', t:'Sırada hangisi gelmeli?', o:['1️⃣','2️⃣','3️⃣','4️⃣'], c:'2️⃣'},
+  {v:'🔵🔵🔴🔵🔵🔴🔵🔵❓', t:'Sırada hangisi gelmeli?', o:['🔴','🔵','🟡','🟢'], c:'🔴'},
+  {v:'☀️☀️🌙☀️☀️🌙☀️☀️❓', t:'Sırada hangisi gelmeli?', o:['☀️','🌙','⭐','☁️'], c:'🌙'},
+  {v:'🐟🐟🐠🐟🐟🐠🐟🐟❓', t:'Sırada hangisi gelmeli?', o:['🐟','🐠','🐬','🐳'], c:'🐠'},
+  {v:'🟢🟡🔴🟢🟡🔴🟢🟡❓', t:'Sırada hangisi gelmeli?', o:['🔴','🟢','🟡','🔵'], c:'🔴'},
+  {v:'⚽🏀⚾⚽🏀⚾⚽🏀❓', t:'Sırada hangisi gelmeli?', o:['⚽','🏀','⚾','🏐'], c:'⚾'},
+  {v:'🌟🌟🌟⭐🌟🌟🌟⭐🌟🌟🌟❓', t:'Sırada hangisi gelmeli?', o:['⭐','🌟','✨','💫'], c:'⭐'},
+  {v:'🐸🐸🐣🐸🐸🐣🐸🐸❓', t:'Sırada hangisi gelmeli?', o:['🐸','🐣','🐤','🐥'], c:'🐣'}
+];
+
+DATA.bulmaca.orta = [
+  {v:'🍎 🍌 🍇 🚗', t:'Hangisi diğerlerinden farklıdır?', o:['🍎','🍌','🍇','🚗'], c:'🚗'},
+  {v:'🐶 🐱 🐭 🌳', t:'Hangisi diğerlerinden farklıdır?', o:['🐶','🐱','🐭','🌳'], c:'🌳'},
+  {v:'⚽ 🏀 🎾 🍕', t:'Hangisi diğerlerinden farklıdır?', o:['⚽','🏀','🎾','🍕'], c:'🍕'},
+  {v:'🚗 🚌 🚲 🐘', t:'Hangisi diğerlerinden farklıdır?', o:['🚗','🚌','🚲','🐘'], c:'🐘'},
+  {v:'🌞 🌙 ⭐ 🍔', t:'Hangisi diğerlerinden farklıdır?', o:['🌞','🌙','⭐','🍔'], c:'🍔'},
+  {v:'👕 👖 🧦 🍩', t:'Hangisi diğerlerinden farklıdır?', o:['👕','👖','🧦','🍩'], c:'🍩'},
+  {v:'🐦 🦋 🐝 🐟', t:'Hangisi uçamaz?', o:['🐦','🦋','🐝','🐟'], c:'🐟'},
+  {v:'🔺 🔵 🟩 🟨', t:'Hangisi üçgendir?', o:['🔺','🔵','🟩','🟨'], c:'🔺'},
+  {v:'🥕 🥦 🍅 🍰', t:'Hangisi bir sebze/meyve değildir?', o:['🥕','🥦','🍅','🍰'], c:'🍰'},
+  {v:'📚 ✏️ 🎒 🍦', t:'Hangisi okul eşyası değildir?', o:['📚','✏️','🎒','🍦'], c:'🍦'},
+  {v:'🦁 🐯 🐻 🐔', t:'Hangisi bir çiftlik hayvanıdır?', o:['🦁','🐯','🐻','🐔'], c:'🐔'},
+  {v:'☂️ 🧤 🧣 🍉', t:'Hangisi kışlık bir eşya değildir?', o:['☂️','🧤','🧣','🍉'], c:'🍉'},
+  {v:'🚀 ✈️ 🚁 🐎', t:'Hangisi havada uçmaz?', o:['🚀','✈️','🚁','🐎'], c:'🐎'},
+  {v:'🎻 🎸 🥁 🔨', t:'Hangisi bir müzik aleti değildir?', o:['🎻','🎸','🥁','🔨'], c:'🔨'},
+  {v:'🐢 🐇 🐌 🐆', t:'Hangisi en hızlı koşar?', o:['🐢','🐇','🐌','🐆'], c:'🐆'}
+];
+
+DATA.bulmaca.zor = [
+  {v:'💡', t:'Kışın beyaza bürünür, güneşte erir. Nedir?', o:['Kar','Yağmur','Bulut','Rüzgar'], c:'Kar'},
+  {v:'💡', t:'Kuyruğu var, havlar, evleri bekler. Nedir?', o:['Köpek','Kedi','Kuş','At'], c:'Köpek'},
+  {v:'💡', t:'Miyavlar, fareleri kovalar, sevimlidir. Nedir?', o:['Kedi','Köpek','Tavşan','Kuş'], c:'Kedi'},
+  {v:'💡', t:'Sarı gagalıdır, sabah erkenden öter, tavuğun eşidir. Nedir?', o:['Horoz','Tavuk','Ördek','Kaz'], c:'Horoz'},
+  {v:'💡', t:'Dört tekerleği var, yolda gider, insan taşır. Nedir?', o:['Araba','Bisiklet','Uçak','Tren'], c:'Araba'},
+  {v:'💡', t:'Kanadı var ama kuş değil, çiçekten çiçeğe konar, bal yapar. Nedir?', o:['Arı','Kelebek','Sinek','Karınca'], c:'Arı'},
+  {v:'💡', t:'Uzun boynu var, en uzun boyunlu hayvandır. Nedir?', o:['Zürafa','Fil','At','Deve'], c:'Zürafa'},
+  {v:'💡', t:'Suda yaşar, solungaçları var, yüzer. Nedir?', o:['Balık','Yunus','Ahtapot','Yengeç'], c:'Balık'},
+  {v:'💡', t:'Sabahları doğar, akşamları batar, ısıtır ve aydınlatır. Nedir?', o:['Güneş','Ay','Yıldız','Bulut'], c:'Güneş'},
+  {v:'💡', t:'Yağmurdan sonra gökyüzünde yedi renk halinde görünür. Nedir?', o:['Gökkuşağı','Bulut','Şimşek','Yıldız'], c:'Gökkuşağı'},
+  {v:'💡', t:'Soğuktur, dondurmanın ve buzdolabının içindedir, katı haldeki sudur. Nedir?', o:['Buz','Kar','Su','Bulut'], c:'Buz'},
+  {v:'💡', t:'Kabuğu var, çok yavaş yürür, evini sırtında taşır. Nedir?', o:['Kaplumbağa','Salyangoz','Kirpi','Kertenkele'], c:'Kaplumbağa'},
+  {v:'💡', t:'Uzun kulakları var, havuç sever, hızlı zıplar. Nedir?', o:['Tavşan','Kedi','Sincap','Fare'], c:'Tavşan'},
+  {v:'💡', t:'Dallardan dallara atlar, muz yer, insana çok benzer. Nedir?', o:['Maymun','Goril','Ayı','Aslan'], c:'Maymun'},
+  {v:'💡', t:'Gece gökyüzünde parlar, küçük ve ışıltılıdır, çok sayıdadır. Nedir?', o:['Yıldız','Ay','Güneş','Bulut'], c:'Yıldız'}
+];
+
+const CAT_META = {
+  sayilar:{name:'Sayılar Adası', icon:'🔢', c1:'#B22222', c2:'#7A1414'},
+  islemler:{name:'İşlemler Adası', icon:'➕', c1:'#1B2A5E', c2:'#0D1B4C'},
+  renkler:{name:'Renkler Adası', icon:'🎨', c1:'#D4AF37', c2:'#9B7A1F'},
+  harfler:{name:'Harfler Adası', icon:'🔤', c1:'#146C43', c2:'#0B4A2C'},
+  bulmaca:{name:'Bulmaca Kışlası', icon:'🧩', c1:'#5C1A78', c2:'#2E0F42'},
+  karisik:{name:'Karışık Macera', icon:'🌈', c1:'#B22222', c2:'#1B2A5E'}
+};
+
+const ENCOURAGE_CORRECT = ['Harikasın! 🎉','Süpersin! ✨','Aferin sana! 👏','Çok doğru! 🌟','Bravo askar! 🥳','Tam isabet! 🎯'];
+const ENCOURAGE_WRONG = ['Az kaldı, devam et! 💪','Bir dahakine yakalarsın! 🙂','Pes etme, denemeye devam! 🌈','Öğrenmek böyle olur! 📚'];
+
+/* ================= SHARED RESULT SCREEN ================= */
+let resultRetryFn = null;
+let resultHomeTarget = 'screen-home';
+function showResult(opts){
+  el('resultEmoji').textContent = opts.emoji;
+  el('resultTitle').textContent = opts.title;
+  el('resultStars').textContent = '⭐'.repeat(opts.stars) + '☆'.repeat(3-opts.stars);
+  el('resultStats').textContent = opts.statsText;
+  resultRetryFn = opts.retry;
+  resultHomeTarget = opts.homeTarget || 'screen-home';
+  showScreen('screen-result');
+}
+el('btnRetry').addEventListener('click', ()=>{ if(resultRetryFn) resultRetryFn(); });
+el('btnHome').addEventListener('click', ()=>{ showScreen(resultHomeTarget); });
+
+/* ================= QUIZ STATE ================= */
+let state = {
+  cat:null, diff:null, pool:[], index:0, score:0, lives:3, correct:0, streak:0, bestStreak:0
+};
+
+/* ---- INTRO ---- */
+let introDone = false;
+function goHomeFromIntro(){
+  if(introDone) return;
+  introDone = true;
+  ensureAudio();
+  showScreen('screen-home');
+}
+el('screen-intro').addEventListener('click', goHomeFromIntro);
+setTimeout(goHomeFromIntro, 3400);
+
+/* ---- HOME ---- */
+document.querySelectorAll('.cat-card').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    ensureAudio();
+    const cat = btn.getAttribute('data-cat');
+    if(cat === 'minioyunlar'){
+      showScreen('screen-minihome');
+    } else if(cat === 'karisik'){
+      startGame('karisik', 'karisik');
+    } else {
+      openDifficulty(cat);
+    }
+  });
+});
+
+function openDifficulty(cat){
+  state.cat = cat;
+  const meta = CAT_META[cat];
+  el('diffIcon').textContent = meta.icon;
+  el('diffTitle').textContent = meta.name;
+  showScreen('screen-difficulty');
+}
+el('diffBack').addEventListener('click', ()=>showScreen('screen-home'));
+document.querySelectorAll('.diff-btn[data-diff]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const diff = btn.getAttribute('data-diff');
+    startGame(state.cat, diff);
+  });
+});
+
+/* ---- MINI GAMES MENU ---- */
+el('miniBack').addEventListener('click', ()=>showScreen('screen-home'));
+el('btnMemory').addEventListener('click', ()=>{ ensureAudio(); startMemory(); });
+el('btnBalloonGame').addEventListener('click', ()=>{ ensureAudio(); startBalloon(); });
+el('btnWhackGame').addEventListener('click', ()=>{ ensureAudio(); startWhack(); });
+
+/* ---- START QUIZ ---- */
+function buildPool(cat, diff){
+  if(cat === 'karisik'){
+    const all = [];
+    Object.keys(DATA).forEach(c=>{
+      Object.keys(DATA[c]).forEach(d=>{
+        DATA[c][d].forEach(q=>all.push(q));
+      });
+    });
+    return shuffle(all).slice(0,10);
+  }
+  return shuffle(DATA[cat][diff]).slice(0,10);
+}
+
+function startGame(cat, diff){
+  state.cat = cat;
+  state.diff = diff;
+  state.pool = buildPool(cat, diff);
+  state.index = 0;
+  state.score = 0;
+  state.lives = 3;
+  state.correct = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+
+  const meta = CAT_META[cat];
+  document.documentElement.style.setProperty('--cat1', meta.c1);
+  document.documentElement.style.setProperty('--cat2', meta.c2);
+  el('gameCatName').textContent = meta.name + (diff!=='karisik' ? ' · '+({kolay:'Kolay',orta:'Orta',zor:'Zor'}[diff]) : '');
+  updateHearts();
+  updateScore();
+  hideMascot();
+  showScreen('screen-game');
+  renderQuestion();
+}
+
+function updateHearts(){
+  el('hearts').textContent = '❤️'.repeat(state.lives) + '🖤'.repeat(3-state.lives);
+}
+function updateScore(){
+  el('scorePill').textContent = state.score + ' ⭐';
+}
+function updateProgress(){
+  const pct = Math.round((state.index/state.pool.length)*100);
+  el('progressFill').style.width = pct+'%';
+}
+
+function renderQuestion(){
+  updateProgress();
+  hideMascot();
+  const q = state.pool[state.index];
+  const visualEl = el('qVisual');
+  const alphaEl = el('alphaStrip');
+
+  if(q.v === ALPHA){
+    visualEl.innerHTML = '';
+    alphaEl.style.display = 'block';
+    alphaEl.textContent = ALPHA;
+  } else {
+    alphaEl.style.display = 'none';
+    visualEl.innerHTML = q.v || '';
+  }
+  el('qText').textContent = q.t;
+
+  const optsWrap = el('qOptions');
+  optsWrap.innerHTML = '';
+  const shuffledOpts = shuffle(q.o);
+  shuffledOpts.forEach(optText=>{
+    const b = document.createElement('button');
+    b.className = 'opt-btn';
+    b.textContent = optText;
+    b.addEventListener('click', ()=>handleAnswer(b, optText, q.c));
+    optsWrap.appendChild(b);
+  });
+}
+
+function handleAnswer(btn, chosen, correct){
+  ensureAudio();
+  const allBtns = document.querySelectorAll('#qOptions .opt-btn');
+  allBtns.forEach(b=>b.setAttribute('disabled','true'));
+
+  const isCorrect = chosen === correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    state.score += 10;
+    state.correct += 1;
+    state.streak += 1;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    sfxCorrect();
+    burstConfetti(16);
+    showMascot('😄', ENCOURAGE_CORRECT[Math.floor(Math.random()*ENCOURAGE_CORRECT.length)]);
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b=>{ if(b.textContent === correct) b.classList.add('correct'); });
+    state.lives -= 1;
+    state.streak = 0;
+    sfxWrong();
+    showMascot('😊', ENCOURAGE_WRONG[Math.floor(Math.random()*ENCOURAGE_WRONG.length)]);
+  }
+  updateScore();
+  updateHearts();
+
+  setTimeout(()=>{
+    if(state.lives <= 0){
+      finishGame();
+      return;
+    }
+    state.index += 1;
+    if(state.index >= state.pool.length){
+      finishGame();
+    } else {
+      renderQuestion();
+    }
+  }, 1150);
+}
+
+function showMascot(emoji, text){
+  el('mascotEmoji').textContent = emoji;
+  el('mascotText').textContent = text;
+  el('mascotBubble').classList.add('show');
+}
+function hideMascot(){
+  el('mascotBubble').classList.remove('show');
+}
+
+function finishGame(){
+  updateProgress();
+  const total = state.pool.length;
+  const pct = state.correct/total;
+  let stars = 0;
+  if(pct >= 0.9) stars = 3;
+  else if(pct >= 0.7) stars = 2;
+  else if(pct >= 0.5) stars = 1;
+
+  sfxComplete();
+  if(stars>0) burstConfetti(28);
+
+  showResult({
+    emoji: stars===3 ? '🏆' : stars===2 ? '🎉' : stars===1 ? '🙂' : '💪',
+    title: stars===3 ? 'Muhteşemsin!' : stars===2 ? 'Harika iş!' : stars===1 ? 'İyi gidiyorsun!' : 'Pes etme!',
+    stars: stars,
+    statsText: state.correct + ' / ' + total + ' doğru cevap · En iyi seri: ' + state.bestStreak,
+    retry: ()=>startGame(state.cat, state.diff),
+    homeTarget: 'screen-home'
+  });
+}
+
+el('gameHome').addEventListener('click', ()=>{ showScreen('screen-home'); });
+el('muteBtn').addEventListener('click', ()=>{
+  muted = !muted;
+  el('muteBtn').textContent = muted ? '🔇' : '🔊';
+});
+
+/* ================= MINI GAME 1: HAFIZA KARTLARI ================= */
+const MEMORY_EMOJIS = ['🎁','🍭','🐬','🦋','🌈','🍉','🚀','🎧'];
+let memoryState = null;
+
+function startMemory(){
+  const cards = shuffle([...MEMORY_EMOJIS, ...MEMORY_EMOJIS]).map((e,i)=>({id:i, emoji:e, flipped:false, matched:false}));
+  memoryState = { cards, moves:0, matchedPairs:0, lock:false, firstPick:null };
+  el('memoryMoves').textContent = '0 hamle';
+  el('memoryPairs').textContent = '0 / 8';
+  renderMemoryGrid();
+  showScreen('screen-memory');
+}
+
+function renderMemoryGrid(){
+  const grid = el('memoryGrid');
+  grid.innerHTML = '';
+  memoryState.cards.forEach(card=>{
+    const btn = document.createElement('button');
+    btn.className = 'mem-card' + (card.flipped?' flipped':'') + (card.matched?' matched':'');
+    btn.innerHTML = '<div class="mem-inner"><div class="mem-back">۞</div><div class="mem-front">'+card.emoji+'</div></div>';
+    btn.addEventListener('click', ()=>flipMemoryCard(card.id));
+    grid.appendChild(btn);
+  });
+}
+
+function flipMemoryCard(id){
+  if(memoryState.lock) return;
+  const card = memoryState.cards.find(c=>c.id===id);
+  if(card.flipped || card.matched) return;
+  ensureAudio();
+  card.flipped = true;
+  renderMemoryGrid();
+
+  if(memoryState.firstPick===null){
+    memoryState.firstPick = id;
+    return;
+  }
+  memoryState.moves++;
+  el('memoryMoves').textContent = memoryState.moves + ' hamle';
+  const first = memoryState.cards.find(c=>c.id===memoryState.firstPick);
+
+  if(first.emoji === card.emoji){
+    first.matched = true; card.matched = true;
+    memoryState.matchedPairs++;
+    el('memoryPairs').textContent = memoryState.matchedPairs + ' / 8';
+    memoryState.firstPick = null;
+    sfxCorrect();
+    if(memoryState.matchedPairs === 8){
+      setTimeout(finishMemory, 450);
+    }
+  } else {
+    memoryState.lock = true;
+    sfxWrong();
+    setTimeout(()=>{
+      first.flipped = false; card.flipped = false;
+      memoryState.firstPick = null; memoryState.lock = false;
+      renderMemoryGrid();
+    }, 750);
+  }
+}
+
+function finishMemory(){
+  sfxComplete();
+  burstConfetti(28);
+  const m = memoryState.moves;
+  const stars = m<=10 ? 3 : m<=16 ? 2 : 1;
+  showResult({
+    emoji: stars===3 ? '🏆' : stars===2 ? '🎉' : '🙂',
+    title: stars===3 ? 'Muhteşem Hafıza!' : stars===2 ? 'Harika iş!' : 'Başardın!',
+    stars: stars,
+    statsText: m + ' hamlede tüm eşleri buldun!',
+    retry: startMemory,
+    homeTarget: 'screen-minihome'
+  });
+}
+
+el('memoryBack').addEventListener('click', ()=>showScreen('screen-minihome'));
+
+/* ================= MINI GAME 2: SAYI BALONU ================= */
+const BALLOON_COLORS = ['#E53935','#1E88E5','#FDD835','#43A047','#8E24AA','#FB8C00','#00ACC1'];
+let balloonState = null;
+
+function startBalloon(){
+  balloonState = { target:1, score:0, lives:3, spawnTimer:null, running:true };
+  el('balloonArea').innerHTML = '';
+  updateBalloonHud();
+  showScreen('screen-balloon');
+  balloonState.spawnTimer = setInterval(spawnBalloon, 900);
+}
+
+function updateBalloonHud(){
+  el('balloonTarget').textContent = balloonState.target;
+  el('balloonLives').textContent = '❤️'.repeat(balloonState.lives) + '🖤'.repeat(3-balloonState.lives);
+  el('balloonScore').textContent = balloonState.score + ' ⭐';
+}
+
+function spawnBalloon(){
+  if(!balloonState || !balloonState.running) return;
+  const forceTarget = Math.random() < 0.45;
+  const num = forceTarget ? balloonState.target : (Math.floor(Math.random()*15)+1);
+  const div = document.createElement('div');
+  div.className = 'balloon';
+  div.style.left = (5 + Math.random()*78) + '%';
+  div.style.background = BALLOON_COLORS[Math.floor(Math.random()*BALLOON_COLORS.length)];
+  const dur = 5 + Math.random()*2.2;
+  div.style.animationDuration = dur + 's';
+  div.textContent = num;
+  div.addEventListener('click', ()=>popBalloon(div, num));
+  el('balloonArea').appendChild(div);
+  div._rm = setTimeout(()=>{ if(div.parentNode) div.remove(); }, dur*1000 + 60);
+}
+
+function popBalloon(div, num){
+  if(!balloonState || !balloonState.running) return;
+  if(div._rm) clearTimeout(div._rm);
+  div.remove();
+  ensureAudio();
+
+  if(num === balloonState.target){
+    balloonState.score += 10;
+    sfxCorrect();
+    burstConfetti(8);
+    balloonState.target += 1;
+    if(balloonState.target > 15){
+      endBalloon(true);
+      return;
+    }
+  } else {
+    balloonState.lives -= 1;
+    sfxWrong();
+    if(balloonState.lives <= 0){
+      endBalloon(false);
+      return;
+    }
+  }
+  updateBalloonHud();
+}
+
+function endBalloon(won){
+  balloonState.running = false;
+  clearInterval(balloonState.spawnTimer);
+  el('balloonArea').innerHTML = '';
+  sfxComplete();
+  if(won) burstConfetti(28);
+  const stars = won ? 3 : balloonState.score>=60 ? 2 : balloonState.score>0 ? 1 : 0;
+  showResult({
+    emoji: won ? '🏆' : '🎈',
+    title: won ? 'Tüm Balonları Patlattın!' : 'Oyun Bitti!',
+    stars: stars,
+    statsText: balloonState.score + ' puan topladın!',
+    retry: startBalloon,
+    homeTarget: 'screen-minihome'
+  });
+}
+
+el('balloonBack').addEventListener('click', ()=>{
+  if(balloonState){ balloonState.running = false; clearInterval(balloonState.spawnTimer); }
+  el('balloonArea').innerHTML = '';
+  showScreen('screen-minihome');
+});
+
+/* ================= MINI GAME 3: HARF KAPLANI ================= */
+const WHACK_LETTERS = ['A','B','C','D','E','F','G','H','I','K','L','M','N','O','P','R','S','T','U','Y','Z'];
+let whackState = null;
+
+function randLetter(){ return WHACK_LETTERS[Math.floor(Math.random()*WHACK_LETTERS.length)]; }
+
+function startWhack(){
+  whackState = { target:randLetter(), score:0, lives:3, correct:0, running:true, timer:null };
+  buildWhackGrid();
+  updateWhackHud();
+  showScreen('screen-whack');
+  whackState.timer = setInterval(popMole, 950);
+}
+
+function buildWhackGrid(){
+  const grid = el('whackGrid');
+  grid.innerHTML = '';
+  for(let i=0;i<9;i++){
+    const hole = document.createElement('button');
+    hole.className = 'whack-hole';
+    hole.dataset.idx = i;
+    hole.innerHTML = '<span class="whack-letter"></span>';
+    hole.addEventListener('click', ()=>hitHole(i));
+    grid.appendChild(hole);
+  }
+}
+
+function updateWhackHud(){
+  el('whackTarget').textContent = whackState.target;
+  el('whackLives').textContent = '❤️'.repeat(whackState.lives) + '🖤'.repeat(3-whackState.lives);
+  el('whackScore').textContent = whackState.score + ' ⭐';
+}
+
+function popMole(){
+  if(!whackState || !whackState.running) return;
+  document.querySelectorAll('.whack-hole.up').forEach(h=>{
+    h.classList.remove('up');
+    h.querySelector('.whack-letter').textContent = '';
+  });
+  const idx = Math.floor(Math.random()*9);
+  const forceTarget = Math.random() < 0.5;
+  const letter = forceTarget ? whackState.target : randLetter();
+  const hole = document.querySelector('.whack-hole[data-idx="'+idx+'"]');
+  if(!hole) return;
+  hole.classList.add('up');
+  hole.querySelector('.whack-letter').textContent = letter;
+  hole._letter = letter;
+  clearTimeout(hole._hideTimer);
+  hole._hideTimer = setTimeout(()=>{
+    hole.classList.remove('up');
+    hole.querySelector('.whack-letter').textContent = '';
+  }, 800);
+}
+
+function hitHole(idx){
+  if(!whackState || !whackState.running) return;
+  const hole = document.querySelector('.whack-hole[data-idx="'+idx+'"]');
+  if(!hole || !hole.classList.contains('up')) return;
+  ensureAudio();
+  const letter = hole._letter;
+  hole.classList.remove('up');
+  hole.querySelector('.whack-letter').textContent = '';
+
+  if(letter === whackState.target){
+    whackState.score += 10;
+    whackState.correct += 1;
+    sfxCorrect();
+    burstConfetti(8);
+    whackState.target = randLetter();
+    updateWhackHud();
+    if(whackState.correct >= 12){
+      endWhack(true);
+    }
+  } else {
+    whackState.lives -= 1;
+    sfxWrong();
+    updateWhackHud();
+    if(whackState.lives <= 0){
+      endWhack(false);
+    }
+  }
+}
+
+function endWhack(won){
+  whackState.running = false;
+  clearInterval(whackState.timer);
+  sfxComplete();
+  if(won) burstConfetti(28);
+  const stars = won ? 3 : whackState.score>=60 ? 2 : whackState.score>0 ? 1 : 0;
+  showResult({
+    emoji: won ? '🏆' : '🦁',
+    title: won ? 'Harf Ustası Oldun!' : 'Oyun Bitti!',
+    stars: stars,
+    statsText: whackState.score + ' puan, ' + whackState.correct + ' doğru yakalama!',
+    retry: startWhack,
+    homeTarget: 'screen-minihome'
+  });
+}
+
+el('whackBack').addEventListener('click', ()=>{
+  if(whackState){ whackState.running = false; clearInterval(whackState.timer); }
+  showScreen('screen-minihome');
+});
+
+})();
+</script>
+</body>
+</html>

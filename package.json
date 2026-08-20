@@ -1,0 +1,16 @@
+{
+  "name": "askar-mektep",
+  "version": "1.0.0",
+  "description": "Askar Mektep - Osmanli temali egitici oyun",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Statik HTML, ayri bir build adimi yok'"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/android": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "appId": "com.askar.mektep",
+  "appName": "Askar Mektep",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}
